@@ -1,0 +1,16 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+div.game {
+    display: block;
+    position: relative;
+    width: 500px;
+    margin: 0;
+}
+
+canvas#game {
+    display: block;
+    position: relative;
+}

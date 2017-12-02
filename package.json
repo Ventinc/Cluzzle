@@ -1,0 +1,34 @@
+{
+  "name": "ld40",
+  "version": "1.0.0",
+  "description": "The more you have, the worse it is",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack",
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ventinc/ld40.git"
+  },
+  "keywords": [
+    "Ludum",
+    "Date",
+    "40"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ventinc/ld40/issues"
+  },
+  "homepage": "https://github.com/Ventinc/ld40#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "http-server": "^0.10.0",
+    "webpack": "^3.9.1"
+  }
+}
