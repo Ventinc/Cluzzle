@@ -10,7 +10,7 @@ class Keyboard {
         addEventListener('keyup', this.onKeyUp.bind(this), false);
     }
     
-    onPress(event) {
+    onKeyDown(event) {
         this._keys[event.key] = true;
     }
 

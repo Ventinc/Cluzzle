@@ -1,4 +1,5 @@
 import Position from './utils/Position'
+import Keyboard from './Keyboard'
 import Level from './Level'
 import loader from './Loader'
 
@@ -42,11 +43,11 @@ export default class Game {
     }
 
     update(delta) { 
-        
+        this._level.update(delta);
     }
 
     render(ctx) {
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "#596A6C";
         ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
         this._level.render(ctx);
     }

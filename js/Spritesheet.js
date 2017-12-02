@@ -10,7 +10,6 @@ export default class Spritesheet {
 
     async load(name) {
         this._image = await loadImage(`./assets/${name}.png`);
-        console.log(this._image);
         this._width = this._image.width;
         this._height = this._image.width;
         return true;
@@ -27,7 +26,7 @@ export default class Spritesheet {
         ctx.drawImage(this._image,
             sx, sy,
             this._tilesize, this._tilesize,
-            x * this._tilesize, y * this._tilesize,
+            x, y,
             this._tilesize, this._tilesize);
     }
 }
