@@ -5,20 +5,26 @@ import {loadJson} from './utils/Utils'
 export default class Map {
 
     constructor() {
-        this.PLAYER_SPAWNS = [7, 8, 9];
+        this.SPAWN_TILE = [7, 8, 9];
         this.COLLISIONS_TILE = [5, 6, 11, 12, 13, 14, 15, 16, 17, 18];
+        this.END_TILE = [10];
         this.TILE_SIZE = 64;
         this._data = [];
         this._spawns = [];
+        this._ends = [];
     }
 
     async load(name) {
         let data = await loadJson(`./maps/${name}.json`);
         this._data = data.data;
-        for (let y = 0; y < 16; ++y) {
-            for (let x = 0; x < 16; ++x) {
-                if (this.PLAYER_SPAWNS.includes(this._data[y][x]))
+        if (this._data) {
+            for (let y = 0; y < 16; ++y) {
+                for (let x = 0; x < 16; ++x) {
+                    if (this.SPAWN_TILE.includes(this._data[y][x]))
                     this._spawns.push(new Position(x, y))
+                    if (this.END_TILE.includes(this._data[y][x]))
+                    this._ends.push(new Position(x, y))
+                }
             }
         }
         return true;
@@ -53,5 +59,9 @@ export default class Map {
 
     get spawns() {
         return this._spawns
+    }
+
+    get ends() {
+        return this._ends;
     }
 }

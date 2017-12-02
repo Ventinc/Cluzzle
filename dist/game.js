@@ -1873,7 +1873,7 @@ var Loader = function () {
     _createClass(Loader, [{
         key: 'load',
         value: function load() {
-            return Promise.all([this.loadMap("level1"), this.loadMap("test"), this.loadSpritesheet("player"), this.loadSpritesheet("tileset")]).catch(function (e) {
+            return Promise.all([this.loadMap("level1"), this.loadMap("level2"), this.loadMap("level3"), this.loadSpritesheet("player"), this.loadSpritesheet("tileset")]).catch(function (e) {
                 return console.error(e);
             });
         }
@@ -3928,11 +3928,13 @@ var Map = function () {
     function Map() {
         _classCallCheck(this, Map);
 
-        this.PLAYER_SPAWNS = [7, 8, 9];
+        this.SPAWN_TILE = [7, 8, 9];
         this.COLLISIONS_TILE = [5, 6, 11, 12, 13, 14, 15, 16, 17, 18];
+        this.END_TILE = [10];
         this.TILE_SIZE = 64;
         this._data = [];
         this._spawns = [];
+        this._ends = [];
     }
 
     _createClass(Map, [{
@@ -3951,9 +3953,12 @@ var Map = function () {
                                 data = _context.sent;
 
                                 this._data = data.data;
-                                for (y = 0; y < 16; ++y) {
-                                    for (x = 0; x < 16; ++x) {
-                                        if (this.PLAYER_SPAWNS.includes(this._data[y][x])) this._spawns.push(new _Position2.default(x, y));
+                                if (this._data) {
+                                    for (y = 0; y < 16; ++y) {
+                                        for (x = 0; x < 16; ++x) {
+                                            if (this.SPAWN_TILE.includes(this._data[y][x])) this._spawns.push(new _Position2.default(x, y));
+                                            if (this.END_TILE.includes(this._data[y][x])) this._ends.push(new _Position2.default(x, y));
+                                        }
                                     }
                                 }
                                 return _context.abrupt('return', true);
@@ -4000,6 +4005,11 @@ var Map = function () {
         key: 'spawns',
         get: function get() {
             return this._spawns;
+        }
+    }, {
+        key: 'ends',
+        get: function get() {
+            return this._ends;
         }
     }]);
 
@@ -9422,7 +9432,8 @@ var Game = function () {
         this._canvas = document.getElementById(name);
         this._ctx = this._canvas.getContext("2d");
         this._previousElapsed = 0;
-        this._levels = ["test"];
+        this._levels = ["level1", "level2", "level3"];
+        this._currentLevel = 0;
         this._level = new _Level2.default();
     }
 
@@ -9460,6 +9471,10 @@ var Game = function () {
         key: 'update',
         value: function update(delta) {
             this._level.update(delta);
+            if (this._level.isFinish()) {
+                this._currentLevel += 1;
+                this._level.load(this._levels[this._currentLevel]);
+            }
         }
     }, {
         key: 'render',
@@ -9541,9 +9556,12 @@ var Level = function () {
         key: 'load',
         value: function load(name) {
             this._map = _Loader2.default.getMap(name);
-            this._players = this._map.spawns.map(function (pos) {
-                return new _Player2.default(pos, name);
-            });
+            this._players = [];
+            if (this._map !== undefined && this._map !== null) {
+                this._players = this._map.spawns.map(function (pos) {
+                    return new _Player2.default(pos, name);
+                });
+            }
         }
     }, {
         key: 'update',
@@ -9553,9 +9571,24 @@ var Level = function () {
             });
         }
     }, {
+        key: 'isFinish',
+        value: function isFinish() {
+            var _this = this;
+
+            var countFinish = 0;
+            if (this._map !== null && this._map !== undefined && this._players.length > 0) {
+                this._map.ends.forEach(function (elem) {
+                    _this._players.forEach(function (player) {
+                        if (player.moveState == -1 && elem.x == player.pos.x && elem.y == player.pos.y) countFinish += 1;
+                    });
+                });
+            }
+            return countFinish >= this._players.length;
+        }
+    }, {
         key: 'render',
         value: function render(ctx) {
-            if (this._map !== null) this._map.render(ctx);
+            if (this._map !== null && this._map !== undefined) this._map.render(ctx);
             this._players.forEach(function (elem) {
                 elem.render(ctx);
             });
@@ -9685,7 +9718,7 @@ var Player = function () {
         _classCallCheck(this, Player);
 
         this.TILE_SIZE = 64;
-        this.ANIMATION_TIME = 10;
+        this.ANIMATION_TIME = 14;
         this._mapName = mapName;
         this._pos = pos;
         this._moves = [[1, 2, 3], //down
@@ -9779,6 +9812,16 @@ var Player = function () {
             var tileset = _Loader2.default.getSpritesheet("player");
 
             tileset.render(ctx, this._pos.x * this.TILE_SIZE + this._move.offset.x, this._pos.y * this.TILE_SIZE + this._move.offset.y, this._moves[this._move.direction][this._move.frame]);
+        }
+    }, {
+        key: 'pos',
+        get: function get() {
+            return this._pos;
+        }
+    }, {
+        key: 'moveState',
+        get: function get() {
+            return this._move.state;
         }
     }]);
 

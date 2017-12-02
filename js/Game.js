@@ -9,8 +9,11 @@ export default class Game {
         this._ctx = this._canvas.getContext("2d");
         this._previousElapsed = 0;
         this._levels = [
-            "test"
+            "level1",
+            "level2",
+            "level3"
         ]
+        this._currentLevel = 0;
         this._level = new Level();
     }
 
@@ -44,6 +47,10 @@ export default class Game {
 
     update(delta) { 
         this._level.update(delta);
+        if (this._level.isFinish()) {
+            this._currentLevel += 1;
+            this._level.load(this._levels[this._currentLevel]);
+        }
     }
 
     render(ctx) {

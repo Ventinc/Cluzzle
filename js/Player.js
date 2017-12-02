@@ -6,7 +6,7 @@ import loader from './Loader'
 export default class Player {
     constructor(pos, mapName) {
         this.TILE_SIZE = 64;
-        this.ANIMATION_TIME = 10;
+        this.ANIMATION_TIME = 14;
         this._mapName = mapName;
         this._pos = pos;
         this._moves = [
@@ -95,6 +95,14 @@ export default class Player {
             this._move.state += 1;
         }
         
+    }
+
+    get pos() {
+        return this._pos;
+    }
+
+    get moveState() {
+        return this._move.state;
     }
 
     render(ctx) {
