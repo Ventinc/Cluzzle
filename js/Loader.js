@@ -1,4 +1,5 @@
 import Map from './Map'
+import Spritesheet from './Spritesheet';
 
 class Loader{
     constructor() {
@@ -8,8 +9,11 @@ class Loader{
 
     load() {
         return Promise.all([
-            this.loadMap("level1")
-        ])
+            this.loadMap("level1"),
+            this.loadMap("test"),
+            this.loadSpritesheet("player"),
+            this.loadSpritesheet("tileset")
+        ]).catch(e => console.error(e))
     }
 
     async loadMap(name) {
@@ -22,11 +26,12 @@ class Loader{
     }
 
     loadSpritesheet(name) {
-
+        this._spritesheets[`${name}`] = new Spritesheet();
+        return this._spritesheets[`${name}`].load(name); 
     }
 
     getSpritesheet(name) {
-
+        return this._spritesheets[`${name}`]
     }
 }
 

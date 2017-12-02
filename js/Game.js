@@ -8,7 +8,7 @@ export default class Game {
         this._ctx = this._canvas.getContext("2d");
         this._previousElapsed = 0;
         this._levels = [
-            "level1"
+            "test"
         ]
         this._level = new Level();
     }

@@ -1,3 +1,4 @@
+import loader from './Loader'
 import {loadJson} from './utils/Utils'
 
 export default class Map {
@@ -12,10 +13,11 @@ export default class Map {
     }
 
     render(ctx) {
+        let tileset = loader.getSpritesheet("tileset");
+
         for (let y = 0; y < 16; ++y) {
             for (let x = 0; x < 16; ++x){
-                ctx.fillStyle = "#002800";
-                ctx.fillRect(x * 64, y * 64, 63, 63);
+                tileset.render(ctx, x, y, this._data[y][x]);
             }
         }
     }

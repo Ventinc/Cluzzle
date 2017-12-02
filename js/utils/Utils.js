@@ -5,13 +5,26 @@ export function loadJson(url) {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === xhr.DONE) {
                 if (xhr.status === 200)
-                    resolve(JSON.parse(xhr.responseText))
+                    resolve(JSON.parse(xhr.responseText));
                 else
-                    reject(`Can't load json named ${url}`)
+                    reject(`Can't load json named ${url}`);
             }
         }
-        xhr.send(null)
-    })
+        xhr.send(null);
+    });
 }
 
-export default {loadJson}
+export function loadImage(src) {
+    return new Promise((resolve, reject) => {
+       let img = new Image();
+       img.onload = () => {
+           resolve(img);
+       }
+       img.onerror = () => {
+           reject(`Can't load this image ${src}`);
+       }
+       img.src = src
+    });
+}
+
+export default {loadJson, loadImage}

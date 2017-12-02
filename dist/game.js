@@ -3709,7 +3709,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Loader = __webpack_require__(126);
+
+var _Loader2 = _interopRequireDefault(_Loader);
+
 var _Utils = __webpack_require__(125);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -3723,7 +3729,7 @@ var Map = function () {
     }
 
     _createClass(Map, [{
-        key: "load",
+        key: 'load',
         value: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(name) {
                 var data;
@@ -3732,16 +3738,16 @@ var Map = function () {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 _context.next = 2;
-                                return (0, _Utils.loadJson)("./maps/" + name + ".json");
+                                return (0, _Utils.loadJson)('./maps/' + name + '.json');
 
                             case 2:
                                 data = _context.sent;
 
                                 this._data = data.data;
-                                return _context.abrupt("return", true);
+                                return _context.abrupt('return', true);
 
                             case 5:
-                            case "end":
+                            case 'end':
                                 return _context.stop();
                         }
                     }
@@ -3755,12 +3761,13 @@ var Map = function () {
             return load;
         }()
     }, {
-        key: "render",
+        key: 'render',
         value: function render(ctx) {
+            var tileset = _Loader2.default.getSpritesheet("tileset");
+
             for (var y = 0; y < 16; ++y) {
                 for (var x = 0; x < 16; ++x) {
-                    ctx.fillStyle = "#002800";
-                    ctx.fillRect(x * 64, y * 64, 63, 63);
+                    tileset.render(ctx, x, y, this._data[y][x]);
                 }
             }
         }
@@ -3782,6 +3789,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.loadJson = loadJson;
+exports.loadImage = loadImage;
 function loadJson(url) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
@@ -3795,7 +3803,20 @@ function loadJson(url) {
     });
 }
 
-exports.default = { loadJson: loadJson };
+function loadImage(src) {
+    return new Promise(function (resolve, reject) {
+        var img = new Image();
+        img.onload = function () {
+            resolve(img);
+        };
+        img.onerror = function () {
+            reject("Can't load this image " + src);
+        };
+        img.src = src;
+    });
+}
+
+exports.default = { loadJson: loadJson, loadImage: loadImage };
 
 /***/ }),
 /* 126 */
@@ -3814,6 +3835,10 @@ var _Map = __webpack_require__(124);
 
 var _Map2 = _interopRequireDefault(_Map);
 
+var _Spritesheet = __webpack_require__(334);
+
+var _Spritesheet2 = _interopRequireDefault(_Spritesheet);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -3829,23 +3854,25 @@ var Loader = function () {
     }
 
     _createClass(Loader, [{
-        key: "load",
+        key: 'load',
         value: function load() {
-            return Promise.all([this.loadMap("level1")]);
+            return Promise.all([this.loadMap("level1"), this.loadMap("test"), this.loadSpritesheet("player"), this.loadSpritesheet("tileset")]).catch(function (e) {
+                return console.error(e);
+            });
         }
     }, {
-        key: "loadMap",
+        key: 'loadMap',
         value: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(name) {
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                this._maps["" + name] = new _Map2.default();
-                                return _context.abrupt("return", this._maps["" + name].load(name));
+                                this._maps['' + name] = new _Map2.default();
+                                return _context.abrupt('return', this._maps['' + name].load(name));
 
                             case 2:
-                            case "end":
+                            case 'end':
                                 return _context.stop();
                         }
                     }
@@ -3859,16 +3886,21 @@ var Loader = function () {
             return loadMap;
         }()
     }, {
-        key: "getMap",
+        key: 'getMap',
         value: function getMap(name) {
-            return this._maps["" + name];
+            return this._maps['' + name];
         }
     }, {
-        key: "loadSpritesheet",
-        value: function loadSpritesheet(name) {}
+        key: 'loadSpritesheet',
+        value: function loadSpritesheet(name) {
+            this._spritesheets['' + name] = new _Spritesheet2.default();
+            return this._spritesheets['' + name].load(name);
+        }
     }, {
-        key: "getSpritesheet",
-        value: function getSpritesheet(name) {}
+        key: 'getSpritesheet',
+        value: function getSpritesheet(name) {
+            return this._spritesheets['' + name];
+        }
     }]);
 
     return Loader;
@@ -9250,7 +9282,7 @@ var Game = function () {
         this._canvas = document.getElementById(name);
         this._ctx = this._canvas.getContext("2d");
         this._previousElapsed = 0;
-        this._levels = ["level1"];
+        this._levels = ["test"];
         this._level = new _Level2.default();
     }
 
@@ -9432,6 +9464,87 @@ var Level = function () {
 }();
 
 exports.default = Level;
+
+/***/ }),
+/* 334 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Utils = __webpack_require__(125);
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Spritesheet = function () {
+    function Spritesheet() {
+        _classCallCheck(this, Spritesheet);
+
+        this._image = null;
+        this._width = 0;
+        this._height = 0;
+        this._tilesize = 64;
+    }
+
+    _createClass(Spritesheet, [{
+        key: 'load',
+        value: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(name) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.next = 2;
+                                return (0, _Utils.loadImage)('./assets/' + name + '.png');
+
+                            case 2:
+                                this._image = _context.sent;
+
+                                console.log(this._image);
+                                this._width = this._image.width;
+                                this._height = this._image.width;
+                                return _context.abrupt('return', true);
+
+                            case 7:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function load(_x) {
+                return _ref.apply(this, arguments);
+            }
+
+            return load;
+        }()
+    }, {
+        key: 'render',
+        value: function render(ctx, x, y, type) {
+            var numberTileWidth = this._width / this._tilesize;
+            var sourceTileY = Math.ceil(type / numberTileWidth);
+            var sourceTileX = type % numberTileWidth;
+            if (sourceTileX == 0) sourceTileX = numberTileWidth;
+            var sx = (sourceTileX - 1) * this._tilesize;
+            var sy = (sourceTileY - 1) * this._tilesize;
+
+            ctx.drawImage(this._image, sx, sy, this._tilesize, this._tilesize, x * this._tilesize, y * this._tilesize, this._tilesize, this._tilesize);
+        }
+    }]);
+
+    return Spritesheet;
+}();
+
+exports.default = Spritesheet;
 
 /***/ })
 /******/ ]);
