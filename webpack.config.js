@@ -1,7 +1,9 @@
+require('babel-polyfill');
 let path = require('path');
 
+
 module.exports = {
-    entry: "./js/main.js",
+    entry: ["babel-polyfill", "./js/main.js"],
     watch: true,
     output: {
         path: path.resolve(__dirname, "dist"),

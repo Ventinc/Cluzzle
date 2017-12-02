@@ -1,16 +1,21 @@
 import Position from './utils/Position'
+import Level from './Level'
+import loader from './Loader'
 
 export default class Game {
     constructor(name) {
         this._canvas = document.getElementById(name);
         this._ctx = this._canvas.getContext("2d");
         this._previousElapsed = 0;
-        this._mousepos = new Position(0, 0);
+        this._levels = [
+            "level1"
+        ]
+        this._level = new Level();
     }
 
     init() {
-        this._canvas.width = 1000;
-        this._canvas.height = 1000;
+        this._canvas.width = 1024;
+        this._canvas.height = 1024;
         this.resizeCanvas();
         addEventListener('resize', this.resizeCanvas.bind(this), false);
 
@@ -29,25 +34,29 @@ export default class Game {
 
         this._canvas.style.height = `${this._height}px`;
         this._canvas.style.width = `${this._width}px`;
-        this.render();
+        this.render(this._ctx);
     }
 
     load() {
-
+        this._level.load(this._levels[0]);        
     }
 
-    update(delta) {
-
+    update(delta) { 
+        
     }
 
-    render() {
-        this.fillStyle = "#000";
-        this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+    render(ctx) {
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+        this._level.render(ctx);
     }
 
     run() {
         this.init();
-        window.requestAnimationFrame(this.tick.bind(this))
+        loader.load().then(() => {
+            this.load();
+            window.requestAnimationFrame(this.tick.bind(this));
+        }).catch(e => console.error(e));
     }
 
     tick(elapsed) {
@@ -58,6 +67,6 @@ export default class Game {
         this._previousElapsed = elapsed;
 
         this.update(delta);
-        this.render()
+        this.render(this._ctx);
     }
 }
