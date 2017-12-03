@@ -15,6 +15,7 @@ class Loader{
             this.loadMap("level2"),
             this.loadMap("level3"),
             this.loadMap("level4"),
+            this.loadMap("level9"),
             this.loadSpritesheet("player"),
             this.loadSpritesheet("tileset"),
             this.loadSpritesheet("menu"),

@@ -13,7 +13,8 @@ export default class Game {
             "level1",
             "level2",
             "level3",
-            "level4"
+            "level4",
+            "level9"
         ]
         this._menu = {
             state: true,
