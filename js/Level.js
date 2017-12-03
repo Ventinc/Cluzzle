@@ -42,7 +42,6 @@ export default class Level {
             this._players.forEach(player => player.setNextMove("right", 3));
         else if (type === "left")
             this._players.forEach(player => player.setNextMove("left", 1));    
-        
     }
 
     update(delta) {
