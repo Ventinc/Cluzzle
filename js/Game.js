@@ -15,6 +15,7 @@ export default class Game {
             "level3",
             "level4",
             "level5",
+            "level6",
             "level9"
         ]
         this._menu = {
