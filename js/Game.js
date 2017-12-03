@@ -58,7 +58,7 @@ export default class Game {
 
     load() {
         this._sound = loader.getSound("music");
-        this._sound.setVolume(5);
+        this._sound.setVolume(10);
         this._menu.display = loader.getSpritesheet("menu");
         this._level.load(this._levels[0], 1);        
     }
