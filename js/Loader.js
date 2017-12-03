@@ -16,6 +16,7 @@ class Loader{
             this.loadMap("level3"),
             this.loadSpritesheet("player"),
             this.loadSpritesheet("tileset"),
+            this.loadSpritesheet("menu"),
             this.loadSound("footstep0"),
             this.loadSound("footstep1"),
             this.loadSound("footstep2"),

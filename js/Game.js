@@ -2,6 +2,7 @@ import Position from './utils/Position'
 import Keyboard from './Keyboard'
 import Level from './Level'
 import loader from './Loader'
+import { loadAudio } from './utils/Utils';
 
 export default class Game {
     constructor(name) {
@@ -13,8 +14,13 @@ export default class Game {
             "level2",
             "level3"
         ]
+        this._menu = {
+            state: true,
+            display: null
+        };
         this._currentLevel = 0;
         this._level = new Level();
+        this._sound = null;
     }
 
     init() {
@@ -27,7 +33,8 @@ export default class Game {
     }
 
     resizeCanvas() {
-        this._width = window.innerWidth;
+        let windowWidth = window.innerWidth;
+        this._width = windowWidth;
         this._height = window.innerHeight;
         let ratio = 1;
 
@@ -38,28 +45,47 @@ export default class Game {
 
         this._canvas.style.height = `${this._height}px`;
         this._canvas.style.width = `${this._width}px`;
+        this._canvas.style.marginLeft = `${(windowWidth - this._width) / 2}px`;
         this.render(this._ctx);
     }
+    
 
     load() {
-        let sound = loader.getSound("music");
-        sound.setVolume(5);
-        //sound.loop();
-        this._level.load(this._levels[0]);        
+        this._sound = loader.getSound("music");
+        this._sound.setVolume(5);
+        this._menu.display = loader.getSpritesheet("menu");
+        this._level.load(this._levels[0], 1);        
     }
 
-    update(delta) { 
-        this._level.update(delta);
-        if (this._level.isFinish()) {
-            this._currentLevel += 1;
-            this._level.load(this._levels[this._currentLevel]);
+    update(delta) {
+        if (this._menu.state === false) {
+            this._level.update(delta);
+            if (this._level.isFinish()) {
+                this._currentLevel += 1;
+                this._level.load(this._levels[this._currentLevel], this._currentLevel + 1);
+            }
+        } else if (Keyboard.isPress(" ")) {
+            this._menu.state = false;
+            this._sound.loop();
         }
     }
 
     render(ctx) {
-        ctx.fillStyle = "#596A6C";
+        ctx.fillStyle = "#3399DA";
         ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
-        this._level.render(ctx);
+        if (this._menu.state === false) {
+            if (this._currentLevel >= this._levels.length) {
+                ctx.font = "60px Bungee";
+                ctx.textAlign = "center"; 
+                ctx.textBaseLine = "middle"
+                ctx.fillStyle = `#FFF`;
+                ctx.fillText("FINISH", 1024 / 2, 1024 / 2);
+            } else {
+                this._level.render(ctx);
+            }
+        } else if (this._menu.display !== null) {
+            this._menu.display.renderFullSize(ctx, 0, 0);
+        }
     }
 
     run() {

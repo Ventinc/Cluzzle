@@ -4,11 +4,14 @@ import loader from './Loader'
 
 export default class Level {
     constructor() {
+        this.ANIMATION_LENGTH = 80;
         this._map = null;
         this._players = [];
+        this._level = 0;
+        this._levelAnimationState = -1;
     }
 
-    load(name) {
+    load(name, level) {
         this._map = loader.getMap(name);
         this._players = [];
         if (this._map !== undefined && this._map !== null) {
@@ -16,6 +19,8 @@ export default class Level {
                 return new Player(pos, name);
             })
         }
+        this._level = level;
+        this._levelAnimationState = 0;
     }
 
     update(delta) {
@@ -41,5 +46,17 @@ export default class Level {
         this._players.forEach(elem => {
             elem.render(ctx);
         })
+        if (this._levelAnimationState !== -1) {
+            let name = `Level ${this._level}`;
+            let opacity = 1 - (this._levelAnimationState / this.ANIMATION_LENGTH);
+            ctx.font = "60px Bungee";
+            ctx.textAlign = "center"; 
+            ctx.textBaseLine = "middle"
+            ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+            ctx.fillText(name, 1024 / 2, 1024 / 2);
+            this._levelAnimationState += 1;
+            if (this._levelAnimationState > this.ANIMATION_LENGTH)
+                this._levelAnimationState = -1;
+        }
     }
 }

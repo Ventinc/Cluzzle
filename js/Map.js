@@ -35,8 +35,9 @@ export default class Map {
 
         for (let y = 0; y < 16; ++y) {
             for (let x = 0; x < 16; ++x){
-                if (this._data[y][x] != 0)
+                if (this._data[y][x] != 0) {
                     tileset.render(ctx, x * this.TILE_SIZE, y * this.TILE_SIZE, this._data[y][x]);
+                }
             }
         }
     }

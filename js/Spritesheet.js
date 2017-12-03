@@ -29,4 +29,8 @@ export default class Spritesheet {
             x, y,
             this._tilesize, this._tilesize);
     }
+
+    renderFullSize(ctx, x, y) {
+        ctx.drawImage(this._image, x, y);
+    }
 }
