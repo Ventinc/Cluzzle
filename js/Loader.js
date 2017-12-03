@@ -22,7 +22,8 @@ class Loader{
             this.loadSound("footstep0"),
             this.loadSound("footstep1"),
             this.loadSound("footstep2"),
-            this.loadSound("music")
+            this.loadSound("music"),
+            document.fonts.load("60px Bungee")
         ]);
     }
 

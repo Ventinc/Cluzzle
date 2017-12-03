@@ -1,6 +1,6 @@
 @font-face {
-    font-family: "Bungee";
-    src: url("font/Bungee-Regular.ttf"),
+    font-family: 'Bungee';
+    src: local('Bungee'), url(./Bungee.ttf);
 }
 
 * {
@@ -14,5 +14,4 @@ body {
 
 canvas#game {
     display: block;
-    font-family: "Bunglee";
 }
