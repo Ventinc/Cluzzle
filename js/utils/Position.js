@@ -28,4 +28,8 @@ export default class Position{
     set y(value) {
         this._y = value
     }
+    
+    toObject() {
+        return {x: this._x, y: this._y};
+    }
 }

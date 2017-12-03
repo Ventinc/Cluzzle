@@ -1,14 +1,17 @@
 import Map from './Map'
 import Player from './Player'
 import loader from './Loader'
+import Keyboard from './Keyboard'
 
 export default class Level {
     constructor() {
         this.ANIMATION_LENGTH = 80;
+        this.ANIMATION_PLAYER_TIME = 12;
         this._map = null;
         this._players = [];
         this._level = 0;
         this._levelAnimationState = -1;
+        this._moveState = -1;
     }
 
     load(name, level) {
@@ -23,7 +26,43 @@ export default class Level {
         this._levelAnimationState = 0;
     }
 
+    restart() {
+        this._players.forEach(player => player.reset());
+        this._levelAnimationState = 0;
+    }
+
+    move(type) {
+        this._moveState = 0;        
+        
+        if (type === "up")
+            this._players.forEach(player => player.setNextMove("up", 2));
+        else if (type === "down")
+            this._players.forEach(player => player.setNextMove("down", 0));
+        else if (type === "right")
+            this._players.forEach(player => player.setNextMove("right", 3));
+        else if (type === "left")
+            this._players.forEach(player => player.setNextMove("left", 1));    
+        
+    }
+
     update(delta) {
+        if (this._moveState == -1) {
+            if (Keyboard.isPress("ArrowUp"))
+                this.move("up");
+            else if (Keyboard.isPress("ArrowDown"))
+                this.move("down");
+            else if (Keyboard.isPress("ArrowRight"))
+                this.move("right");
+            else if (Keyboard.isPress("ArrowLeft"))
+                this.move("left");
+            else if (this._levelAnimationState === -1 && Keyboard.isPress("r"))
+                this.restart()
+        } else {
+            this._moveState += 1;
+            if (this._moveState == this.ANIMATION_PLAYER_TIME)
+                this._moveState = -1;
+        }
+
         this._players.forEach(player => player.update(delta));
     }
 

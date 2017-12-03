@@ -10,9 +10,10 @@ export default class Game {
         this._ctx = this._canvas.getContext("2d");
         this._previousElapsed = 0;
         this._levels = [
-            "level1",
-            "level2",
-            "level3"
+            //"level1",
+            //"level2",
+            //"level3",
+            "level4"
         ]
         this._menu = {
             state: true,

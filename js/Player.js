@@ -6,8 +6,9 @@ import loader from './Loader'
 export default class Player {
     constructor(pos, mapName) {
         this.TILE_SIZE = 64;
-        this.ANIMATION_TIME = 14;
+        this.ANIMATION_TIME = 12;
         this._mapName = mapName;
+        this._defaultPos = new Position(pos.x, pos.y);
         this._pos = pos;
         this._moves = [
             [1, 2, 3], //down
@@ -25,6 +26,14 @@ export default class Player {
         };
 
         this._move.offset.set({x: 0, y: 0});
+    }
+
+    isMoving() {
+        return this._move.state !== -1;
+    }
+
+    reset(){
+        this._pos.set(this._defaultPos.toObject());
     }
 
     setNextMove (type, orientation) {
@@ -52,16 +61,6 @@ export default class Player {
     }
 
     update(delta) {
-        if (this._move.state === -1) {
-            if (Keyboard.isPress("ArrowUp"))
-                this.setNextMove("up", 2);
-            else if (Keyboard.isPress("ArrowDown"))
-                this.setNextMove("down", 0);       
-            else if (Keyboard.isPress("ArrowRight"))
-                this.setNextMove("right", 3);        
-            else if (Keyboard.isPress("ArrowLeft"))
-                this.setNextMove("left", 1);
-        }
         this.updateMove()
     }
 
