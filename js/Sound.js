@@ -11,7 +11,7 @@ export default class Sound {
     }
 
     play() {
-        //this._sound.play();
+        this._sound.play();
     }
 
     loop() {
