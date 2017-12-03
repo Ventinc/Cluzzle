@@ -6,7 +6,7 @@ export default class Map {
 
     constructor() {
         this.SPAWN_TILE = [7, 8, 9];
-        this.COLLISIONS_TILE = [5, 6, 11, 12, 13, 14, 15, 16, 17, 18];
+        this.COLLISIONS_TILE = [0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 18];
         this.END_TILE = [10];
         this.TILE_SIZE = 64;
         this._data = [];

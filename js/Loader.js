@@ -1,10 +1,12 @@
 import Map from './Map'
 import Spritesheet from './Spritesheet';
+import Sound from './Sound';
 
 class Loader{
     constructor() {
         this._maps = {};
         this._spritesheets = [];
+        this._sounds = [];
     }
 
     load() {
@@ -13,8 +15,12 @@ class Loader{
             this.loadMap("level2"),
             this.loadMap("level3"),
             this.loadSpritesheet("player"),
-            this.loadSpritesheet("tileset")
-        ]).catch(e => console.error(e))
+            this.loadSpritesheet("tileset"),
+            this.loadSound("footstep0"),
+            this.loadSound("footstep1"),
+            this.loadSound("footstep2"),
+            this.loadSound("music")
+        ]);
     }
 
     async loadMap(name) {
@@ -33,6 +39,15 @@ class Loader{
 
     getSpritesheet(name) {
         return this._spritesheets[`${name}`]
+    }
+
+    loadSound(name) {
+        this._sounds[`${name}`] = new Sound();
+        return this._sounds[`${name}`].load(name);
+    }
+
+    getSound(name) {
+        return this._sounds[`${name}`];
     }
 }
 

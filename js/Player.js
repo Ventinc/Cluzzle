@@ -19,6 +19,7 @@ export default class Player {
         this._move = {
             state: -1,
             frame: 0,
+            last_play: -1,
             direction: 0, // 0: down, 1: left, 2: up, 3: right
             offset: new Position()
         };

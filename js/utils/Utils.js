@@ -27,4 +27,18 @@ export function loadImage(src) {
     });
 }
 
+export function loadAudio(src) {
+    return new Promise((resolve, reject) => {
+        let audio = new Audio();
+        audio.onloadeddata = () => {
+            resolve(audio);
+        }
+        audio.onerror = () => {
+            reject(`Can't load this sound ${src}`)
+        }
+        audio.src = src;
+        audio.load();
+    });
+}
+
 export default {loadJson, loadImage}

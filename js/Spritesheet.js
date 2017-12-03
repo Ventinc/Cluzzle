@@ -9,7 +9,7 @@ export default class Spritesheet {
     }
 
     async load(name) {
-        this._image = await loadImage(`./assets/${name}.png`);
+        this._image = await loadImage(`./assets/spritesheets/${name}.png`);
         this._width = this._image.width;
         this._height = this._image.width;
         return true;

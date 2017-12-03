@@ -42,6 +42,9 @@ export default class Game {
     }
 
     load() {
+        let sound = loader.getSound("music");
+        sound.setVolume(5);
+        //sound.loop();
         this._level.load(this._levels[0]);        
     }
 
