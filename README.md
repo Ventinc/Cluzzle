@@ -10,4 +10,6 @@ And this command to create an http server
 
     npm run start
 
+You can play [here](https://ventinc.github.io)
+
 ![Cluzzle image](./assets/game.png "Image du jeu")
